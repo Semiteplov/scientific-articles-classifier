@@ -1,0 +1,6 @@
+[core]
+    remote = yandex-s3
+['remote "yandex-s3"']
+    url = s3://arxiv-ml-data
+    endpointurl = https://storage.yandexcloud.net
+    profile = yandex
