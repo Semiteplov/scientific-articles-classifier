@@ -6,3 +6,15 @@ data:
   force_preprocess: false
 
   min_abstract_length: 100
+
+  text:
+    max_length: 256
+    use_title: true
+
+  split:
+    val_size: 0.15
+    seed: 42
+
+  loader:
+    batch_size: 32
+    num_workers: 4

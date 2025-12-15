@@ -1,0 +1,3 @@
+defaults:
+  - logging: mlflow
+  - data: data
