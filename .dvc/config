@@ -1,6 +1,6 @@
 [core]
     remote = yandex-s3
 ['remote "yandex-s3"']
-    url = s3://arxiv-ml-data
+    url = s3://ycs3/arxiv-ml-data/hash
     endpointurl = https://storage.yandexcloud.net
     profile = yandex
