@@ -238,9 +238,10 @@ Hydra выполнит несколько запусков подряд, каж�
 ### Запуск инференса
 
 ```bash
-uv run python -m scientific_articles_classifier.commands infer \
-  --run_id=<mlflow_run_id> \
-  --texts="This paper proposes a new transformer architecture"
+uv run python main.py infer \
+  --run_id=<MLFLOW_RUN_ID> \
+  --texts="This paper proposes a new transformer architecture" \
+  --texts="We introduce a novel approach to self-supervised learning"
 ```
 
 Модель загружается напрямую из MLflow и используется для предсказания класса
