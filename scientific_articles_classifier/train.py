@@ -38,10 +38,12 @@ def train(cfg: DictConfig) -> None:
 
     mlflow.set_tracking_uri(cfg.logging.tracking_uri)
 
+    run_name = f"{cfg.model.name}-lr{cfg.model.lr}-ed{cfg.model.embedding_dim}"
+
     logger = MLFlowLogger(
         experiment_name=cfg.logging.experiment_name,
         tracking_uri=cfg.logging.tracking_uri,
-        run_name=cfg.logging.run_name,
+        run_name=run_name,
     )
 
     model_params = _cfg_to_flat_dict(cfg.model)
@@ -61,8 +63,14 @@ def train(cfg: DictConfig) -> None:
         devices=cfg.trainer.devices,
         log_every_n_steps=cfg.trainer.log_every_n_steps,
         logger=logger,
+        enable_checkpointing=False,
     )
 
     trainer.fit(model, datamodule=datamodule)
 
-    mlflow_log_model(model, artifact_path="model")
+    with mlflow.start_run(run_id=logger.run_id):
+        mlflow_log_model(
+            model,
+            artifact_path="model",
+            registered_model_name=f"scientific-articles-classifier-{cfg.model.name}",
+        )

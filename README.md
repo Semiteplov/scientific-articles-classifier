@@ -119,10 +119,17 @@ cd scientific-articles-classifier
 
 ### 2. Установка зависимостей
 
-Проект использует **uv** для управления окружением.
+Проект использует **uv** для управления окружением. По умолчанию ставится torch
+cpu.
 
 ```bash
 uv sync
+```
+
+Для cuda необходимо выполнить следующую команду:
+
+```bash
+uv pip install --upgrade torch --index-url https://download.pytorch.org/whl/cu130
 ```
 
 ---
@@ -154,6 +161,12 @@ http://127.0.0.1:8080
 
 ### 5. Опционально. Загрузка данных
 
+Данные хранятся в Yandex Object Storage, поэтому необходимо прописать aws keys
+для доступа в бакет, для их получения напишите мне в тг, на почту или где-то
+ещё. Если не хотите разбираться с ключами, то можете просто скачать данные
+[отсюда](https://drive.google.com/file/d/10kTmPqEi6DGpiWnS6GLcI2rU6YgoHPyt/view?usp=sharing)
+и положить parquet файл в `data/processed`.
+
 Загрузка встроена в `train.py` и `infer.py`, но можно выполнить отдельно:
 
 ```bash
@@ -172,7 +185,7 @@ dvc pull data/processed
 Единая точка входа:
 
 ```bash
-python -m scientific_articles_classifier.commands
+uv run python main.py
 ```
 
 ---
@@ -182,7 +195,7 @@ python -m scientific_articles_classifier.commands
 Пример для GRU-модели:
 
 ```bash
-uv run python -m scientific_articles_classifier.commands train model=gru
+uv run python main.py train --models=gru
 ```
 
 Доступные модели:
@@ -196,7 +209,7 @@ uv run python -m scientific_articles_classifier.commands train model=gru
 ### Обучение всех моделей
 
 ```bash
-uv run python -m scientific_articles_classifier.commands train -m model=gru,cnn,transformer
+uv run python main.py train --models=gru,cnn,transformer
 ```
 
 Hydra выполнит несколько запусков подряд, каждый из которых будет:
@@ -259,15 +272,3 @@ configs/
 ```bash
 model.hidden_dim=256 trainer.max_epochs=10
 ```
-
----
-
-## Качество кода
-
-Проект соответствует требованиям MLOps:
-
-- отсутствует исполняемый код на уровне модулей,
-- данные не коммитятся в Git,
-- эксперименты воспроизводимы,
-- используется централизованное логирование,
-- применяются инструменты линтинга и форматирования (ruff).

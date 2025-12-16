@@ -1,7 +1,7 @@
 defaults:
   - logging: mlflow
   - data: arxiv
-  - model: transformer
+  - model: gru
   - _self_
 
 seed: 42
