@@ -14,7 +14,7 @@ from scientific_articles_classifier.models.transformer import TransformerClassif
 
 def infer(cfg: DictConfig, texts: Iterable[str]) -> list[str]:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    pull_data([Path("data/processed")])
+    pull_data([Path("data/processed/arxiv-ml.parquet")])
 
     datamodule = ArxivDataModule(cfg)
     datamodule.setup("fit")

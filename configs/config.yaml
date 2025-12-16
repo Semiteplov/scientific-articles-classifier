@@ -1,6 +1,6 @@
 defaults:
   - logging: mlflow
-  - data: data
+  - data: arxiv
   - model: transformer
   - _self_
 

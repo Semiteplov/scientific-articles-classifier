@@ -1,7 +1,8 @@
 import torch
-from base import TextClassifier
 from omegaconf import DictConfig
 from torch import nn
+
+from .base import TextClassifier
 
 
 class GRUClassifier(TextClassifier):

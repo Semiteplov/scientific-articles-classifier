@@ -5,11 +5,12 @@ import lightning as L
 import mlflow
 from lightning.pytorch.loggers import MLFlowLogger
 from mlflow.pytorch import log_model as mlflow_log_model
-from models import CNNClassifier, GRUClassifier, TransformerClassifier
 from omegaconf import DictConfig, OmegaConf
 
 from data.io import pull_data
 from scientific_articles_classifier.data import ArxivDataModule
+
+from .models import CNNClassifier, GRUClassifier, TransformerClassifier
 
 
 def _cfg_to_flat_dict(cfg_section) -> dict:
@@ -21,7 +22,7 @@ def _cfg_to_flat_dict(cfg_section) -> dict:
 
 def train(cfg: DictConfig) -> None:
     L.seed_everything(cfg.seed, workers=True)
-    pull_data([Path("data/processed")])
+    pull_data([Path("data/processed/arxiv-ml.parquet")])
 
     datamodule = ArxivDataModule(cfg)
     datamodule.setup("fit")

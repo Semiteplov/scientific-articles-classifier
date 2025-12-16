@@ -1,6 +1,6 @@
 import fire
 
-from commands import infer_cmd, train_cmd
+from scientific_articles_classifier.commands import infer_cmd, train_cmd
 
 
 def main() -> None:
@@ -10,3 +10,7 @@ def main() -> None:
             "infer": infer_cmd,
         }
     )
+
+
+if __name__ == "__main__":
+    main()
