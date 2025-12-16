@@ -1,20 +1,23 @@
-data:
-  raw_path: data/raw/arxiv-metadata-oai-snapshot.json.gz
-  precessed_path: data/processed/arxiv-ml.parquet
+raw_path: data/raw/arxiv-metadata-oai-snapshot.json.gz
+processed_path: data/processed/arxiv-ml.parquet
 
-  use_processed_only: true
-  force_preprocess: false
+label_column: categories
+text_column: abstract
 
-  min_abstract_length: 100
+use_processed_only: true
+force_preprocess: false
 
-  text:
-    max_length: 256
-    use_title: true
+min_abstract_length: 100
 
-  split:
-    val_size: 0.15
-    seed: 42
+text:
+  max_length: 256
+  use_title: true
 
-  loader:
-    batch_size: 32
-    num_workers: 4
+split:
+  val_size: 0.15
+  seed: 42
+
+loader:
+  train_batch_size: 64
+  val_batch_size: 64
+  num_workers: 4

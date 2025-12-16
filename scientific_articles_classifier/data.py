@@ -83,12 +83,14 @@ class ArxivDataModule(L.LightningDataModule):
             [texts[i] for i in train_idx],
             labels[train_idx],
             self.cfg.data.text.max_length,
+            self.encoder,
         )
 
         self.val_dataset = ArxivDataset(
             [texts[i] for i in val_idx],
             labels[val_idx],
             self.cfg.data.text.max_length,
+            self.encoder,
         )
 
     def train_dataloader(self) -> DataLoader:
@@ -97,7 +99,7 @@ class ArxivDataModule(L.LightningDataModule):
 
         return DataLoader(
             self.train_dataset,
-            batch_size=self.cfg.data.loader.batch_size,
+            batch_size=self.cfg.data.loader.train_batch_size,
             shuffle=True,
             num_workers=self.cfg.data.loader.num_workers,
             pin_memory=True,
@@ -109,7 +111,7 @@ class ArxivDataModule(L.LightningDataModule):
 
         return DataLoader(
             self.val_dataset,
-            batch_size=self.cfg.data.loader.batch_size,
+            batch_size=self.cfg.data.loader.val_batch_size,
             shuffle=False,
             num_workers=self.cfg.data.loader.num_workers,
             pin_memory=True,
