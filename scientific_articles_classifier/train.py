@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from pathlib import Path
 
 import lightning as L
 import mlflow
@@ -7,6 +8,7 @@ from mlflow.pytorch import log_model as mlflow_log_model
 from models import CNNClassifier, GRUClassifier, TransformerClassifier
 from omegaconf import DictConfig, OmegaConf
 
+from data.io import pull_data
 from scientific_articles_classifier.data import ArxivDataModule
 
 
@@ -19,6 +21,7 @@ def _cfg_to_flat_dict(cfg_section) -> dict:
 
 def train(cfg: DictConfig) -> None:
     L.seed_everything(cfg.seed, workers=True)
+    pull_data([Path("data/processed")])
 
     datamodule = ArxivDataModule(cfg)
     datamodule.setup("fit")

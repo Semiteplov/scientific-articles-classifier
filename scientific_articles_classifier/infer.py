@@ -1,9 +1,11 @@
 from collections.abc import Iterable
+from pathlib import Path
 
 import torch
 from mlflow.pytorch import load_model
 from omegaconf import DictConfig
 
+from data.io import pull_data
 from scientific_articles_classifier.data import ArxivDataModule
 from scientific_articles_classifier.models.cnn import CNNClassifier
 from scientific_articles_classifier.models.gru import GRUClassifier
@@ -12,6 +14,7 @@ from scientific_articles_classifier.models.transformer import TransformerClassif
 
 def infer(cfg: DictConfig, texts: Iterable[str]) -> list[str]:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    pull_data([Path("data/processed")])
 
     datamodule = ArxivDataModule(cfg)
     datamodule.setup("fit")
