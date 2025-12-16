@@ -1,0 +1,10 @@
+model:
+  name: transformer
+  num_embeddings: 256
+  embedding_dim: 64
+  num_heads: 4
+  ff_dim: 256
+  num_layers: 2
+  dropout: 0.1
+  lr: 1e-3
+  weight_decay: 1e-4

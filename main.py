@@ -1,6 +1,12 @@
-def main():
-    print("Hello from scientific-articles-classifier!")
+import fire
+
+from commands import infer_cmd, train_cmd
 
 
-if __name__ == "__main__":
-    main()
+def main() -> None:
+    fire.Fire(
+        {
+            "train": train_cmd,
+            "infer": infer_cmd,
+        }
+    )

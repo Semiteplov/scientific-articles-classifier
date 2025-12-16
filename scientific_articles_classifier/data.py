@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 import lightning as L
@@ -10,6 +8,8 @@ from omegaconf import DictConfig
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 
+from utils.text_encoder import ByteTextEncoder
+
 
 class ArxivDataset(Dataset):
     def __init__(
@@ -17,23 +17,18 @@ class ArxivDataset(Dataset):
         texts: list[str],
         labels: np.ndarray,
         max_length: int,
+        encoder: ByteTextEncoder,
     ) -> None:
         self.texts = texts
         self.labels = labels.astype(np.int64)
         self.max_length = max_length
+        self.encoder = encoder
 
     def __len__(self) -> int:
         return len(self.texts)
 
-    def _encode(self, text: str) -> torch.Tensor:
-        encoded = text.encode("utf-8", errors="ignore")[: self.max_length]
-        padded = encoded + b"\x00" * max(0, self.max_length - len(encoded))
-        return torch.tensor(list(padded), dtype=torch.long)
-
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
-        x = self._encode(self.texts[idx])
-        y = torch.tensor(self.labels[idx], dtype=torch.long)
-        return x, y
+        return self.encoder.encode(self.texts[idx]), self.labels[idx]
 
 
 class ArxivDataModule(L.LightningDataModule):
@@ -46,6 +41,8 @@ class ArxivDataModule(L.LightningDataModule):
 
         self.label_to_id: dict[str, int] = {}
         self.id_to_label: dict[int, str] = {}
+
+        self.encoder = ByteTextEncoder(cfg.data.text.max_length)
 
     @property
     def num_classes(self) -> int:
